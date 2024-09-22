@@ -49,7 +49,7 @@ def casestatus_csv(data):
             writer.writeheader() 
 
         writer.writerow(data)
-        print(f"Data saved to {CSV_FILE_PATH}")
+        print(f"The extracted datas are saved to {CSV_FILE_PATH}")
 
 schedule.every().day.at("20:13").do(extract_casestatus)
 # schedule.every().day.at("17:30").do(extract_casestatus)
