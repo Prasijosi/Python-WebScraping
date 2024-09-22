@@ -1,7 +1,7 @@
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.service import Service
-import schedule, time
+import schedule , time
 
 CHROME_DRIVER_PATH = 'drivers/chromedriver.exe' 
 
@@ -36,7 +36,7 @@ def extract_casestatus():
     
     driver.quit()
 
-schedule.every().day.at("15:18").do(extract_casestatus)
+schedule.every().day.at("17:13").do(extract_casestatus)
 # schedule.every().day.at("17:30").do(extract_casestatus)
 
 while True:
