@@ -1,7 +1,10 @@
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.service import Service
-import schedule, time, csv , os
+import schedule
+import os
+import time
+import csv
 
 
 CHROME_DRIVER_PATH = 'drivers/chromedriver.exe'
@@ -51,7 +54,7 @@ def casestatus_csv(data):
         writer.writerow(data)
         print(f"The extracted datas are saved to {CSV_FILE_PATH}")
 
-schedule.every().day.at("20:13").do(extract_casestatus)
+schedule.every().day.at("11:35").do(extract_casestatus)
 # schedule.every().day.at("17:30").do(extract_casestatus)
 
 while True:
