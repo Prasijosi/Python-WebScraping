@@ -54,8 +54,8 @@ def casestatus_csv(data):
         writer.writerow(data)
         print(f"The extracted datas are saved to {CSV_FILE_PATH}")
 
-schedule.every().day.at("11:35").do(extract_casestatus)
-# schedule.every().day.at("17:30").do(extract_casestatus)
+schedule.every().day.at("10:30").do(extract_casestatus)
+schedule.every().day.at("17:30").do(extract_casestatus)
 
 while True:
     schedule.run_pending()
