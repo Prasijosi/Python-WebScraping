@@ -9,6 +9,8 @@ from bs4 import BeautifulSoup
 import json
 import schedule
 import time
+import os
+from datetime import datetime
 
 CHROME_DRIVER_PATH = 'drivers/chromedriver.exe'
 
@@ -39,7 +41,7 @@ def search_and_click_result(driver, registration_number):
     driver.get(url)
 
     try:
-        wait = WebDriverWait(driver, 10)
+        wait = WebDriverWait(driver, 3)
         print("Waiting for the input field")
 
         # Fill the registration number field
@@ -97,13 +99,24 @@ def scrape_case_details():
         "080-CR-0002"
     ]
     
+    # List to store all case details
+    all_case_details = []
+    
     print("Initializing WebDriver")
+    
     service = Service(CHROME_DRIVER_PATH)
     chrome_options = Options()
     chrome_options.add_argument("--disable-gpu")
+    chrome_options.add_argument("headless")
+    chrome_options.add_argument("--no-sandbox")
+    chrome_options.add_argument("--disable-dev-shm-usage")
     driver = webdriver.Chrome(service=service, options=chrome_options)
-
-    all_case_details = []  # List to store all case details
+    
+    #dynamic file name
+    timestamp = datetime.now().strftime('%Y-%m-%d_%H-%M-%S')
+    file_name = f'case_details_{timestamp}.json'
+    folder_name = "case_details"
+    file_path = os.path.join(folder_name, file_name)
 
     try:
         for number in hardcoded_case_numbers:
@@ -114,7 +127,7 @@ def scrape_case_details():
                 all_case_details.append(case_details_json)  # Add to list
 
         # Save all case details to a single JSON file
-        with open('case_details.json', 'w', encoding='utf-8') as json_file:
+        with open(file_path, 'w', encoding='utf-8') as json_file:
             json.dump(all_case_details, json_file, ensure_ascii=False, indent=4)
         print("All case details have been saved to case_details.json")
 
@@ -126,9 +139,10 @@ def scrape_case_details():
 
 # scrape_case_details()
 
-schedule.every().day.at("16:02").do(scrape_case_details)
-# schedule.every().day.at("17:30").do(scrape_case_details)
+schedule.every().day.at("17:26").do(scrape_case_details)#have to wait a while like 16:53 and 50 seconds ma xa bhane you have to wait 10s
+schedule.every().day.at("17:27").do(scrape_case_details)
 
 while True:
+    print(f"Checking for pending jobs at {time.strftime('%H:%M:%S')}")
     schedule.run_pending()
     time.sleep(1) 
