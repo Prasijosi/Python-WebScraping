@@ -139,8 +139,8 @@ def scrape_case_details():
 
 # scrape_case_details()
 
-schedule.every().day.at("17:26").do(scrape_case_details)#have to wait a while like 16:53 and 50 seconds ma xa bhane you have to wait 10s
-schedule.every().day.at("17:27").do(scrape_case_details)
+schedule.every().day.at("18:40").do(scrape_case_details)#have to wait a while like 16:53 and 50 seconds ma xa bhane you have to wait 10s
+schedule.every().day.at("18:42").do(scrape_case_details)
 
 while True:
     print(f"Checking for pending jobs at {time.strftime('%H:%M:%S')}")
