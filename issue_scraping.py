@@ -14,7 +14,7 @@ from datetime import datetime
 
 CHROME_DRIVER_PATH = 'drivers/chromedriver.exe'
 
-def parse_table_to_json(html):
+def table_to_json(html):
     soup = BeautifulSoup(html, 'html.parser')
     result = {}
     current_parent = None
@@ -35,7 +35,7 @@ def parse_table_to_json(html):
 
     return result
 
-def search_and_click_result(driver, registration_number):
+def fetch_case_details(driver, registration_number):
     print("Opening the Nepal Supreme Court Website")
     url = "https://supremecourt.gov.np/lic/sys.php?d=reports&f=case_details"
     driver.get(url)
@@ -120,10 +120,10 @@ def scrape_case_details():
 
     try:
         for number in hardcoded_case_numbers:
-            html_content = search_and_click_result(driver, number)
+            html_content = fetch_case_details(driver, number)
             
             if html_content:  # Check if we received valid HTML content
-                case_details_json = parse_table_to_json(html_content)
+                case_details_json = table_to_json(html_content)
                 all_case_details.append(case_details_json)  # Add to list
 
         # Save all case details to a single JSON file
