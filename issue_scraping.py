@@ -20,13 +20,38 @@ def normalize_text(text):
     return ' '.join(text.strip().split())
 
 def table_to_json(html, case_number):
+    मुद्दाको_विवरण = extract_from_irregular_table(html)
     लगाब_मुद्दाहरुको_विवरण = extract_from_table(html, "लगाब मुद्दाहरुको विवरण")
-    मुद्दाको_स्थितीको_बिस्तृत_विवरण = extract_from_table(html, "मुद्दाको स्थितीको बिस्तृत विवरण")
     तारेख_विवरण = extract_from_table(html, "तारेख विवरण")
+    मुद्दाको_स्थितीको_बिस्तृत_विवरण = extract_from_table(html, "मुद्दाको स्थितीको बिस्तृत विवरण")
     पेशी_को_विवरण = extract_from_table(html, 'पेशी को विवरण')
-    result={case_number: {"लगाब मुद्दाहरुको विवरण": लगाब_मुद्दाहरुको_विवरण, "मुद्दाको स्थितीको बिस्तृत विवरण": मुद्दाको_स्थितीको_बिस्तृत_विवरण,"तारेख विवरण": तारेख_विवरण, "पेशी को विवरण": पेशी_को_विवरण}}
+    result={case_number: {"मुद्दाको विवरण": मुद्दाको_विवरण, "लगाब मुद्दाहरुको विवरण": लगाब_मुद्दाहरुको_विवरण,"तारेख विवरण": तारेख_विवरण, "मुद्दाको स्थितीको बिस्तृत विवरण": मुद्दाको_स्थितीको_बिस्तृत_विवरण, "पेशी को विवरण": पेशी_को_विवरण}}
     return result
 
+
+def extract_from_irregular_table(html):
+    soup = BeautifulSoup(html, "html.parser")
+    result = {}
+    current_parent = None
+
+    for row in soup.find_all("tr"):
+        header = row.find("th")
+        if header:
+            current_parent = re.sub(r"\s+", " ", header.text)
+                
+        elif current_parent == "मुद्दाको विवरण":
+            cells = row.find_all("td")
+            if cells:
+                for i in range(0, len(cells), 2):
+                    key = re.sub(r"\s+", " ", cells[i].get_text(strip=True))
+                    value = (
+                        re.sub(r"\s+", " ", cells[i + 1].get_text(strip=True))
+                        if i + 1 < len(cells)
+                        else None
+                    )
+
+                    result[key] = value
+    return result
 
 def extract_from_table(html,text):
     soup = BeautifulSoup(html, "html.parser")
